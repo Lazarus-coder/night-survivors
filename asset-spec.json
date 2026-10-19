@@ -1,0 +1,74 @@
+[
+  {
+    "key": "kenney_rl_sheet",
+    "type": "spritesheet",
+    "frameWidth": 16,
+    "frameHeight": 16,
+    "margin": 1,
+    "spacing": 1,
+    "url": "https://raw.githubusercontent.com/wridzer/Grad_HKU/main/game/Art/kenney_roguelike-rpg-pack/Spritesheet/roguelikeSheet_transparent.png",
+    "license": "CC0 1.0",
+    "credit": "Kenney — roguelike/RPG pack (16x16, ~1767 tiles)",
+    "source": "https://kenney.nl/assets/roguelike-rpg-pack"
+  },
+  { "key": "kenney_rl_info", "type": "text", "file": "kenney_roguelike-rpg_pack-spritesheetInfo.txt", "url": "https://raw.githubusercontent.com/wridzer/Grad_HKU/main/game/Art/kenney_roguelike-rpg-pack/Spritesheet/spritesheetInfo.txt" },
+  { "key": "kenney_rl_license", "type": "text", "file": "kenney_roguelike-rpg_pack-License.txt", "url": "https://raw.githubusercontent.com/wridzer/Grad_HKU/main/game/Art/kenney_roguelike-rpg-pack/License.txt" },
+
+  {
+    "key": "kenney_td_tiles",
+    "type": "spritesheet",
+    "frameWidth": 16,
+    "frameHeight": 16,
+    "url": "https://raw.githubusercontent.com/artuq/LootClicker/main/assets/kenney_tiny-dungeon/Tilemap/tilemap_packed.png",
+    "license": "CC0 1.0",
+    "credit": "Kenney — Tiny Dungeon (16x16, 132 tiles)",
+    "source": "https://kenney.nl/assets/tiny-dungeon"
+  },
+  { "key": "kenney_td_license", "type": "text", "file": "kenney_tiny-dungeon-License.txt", "url": "https://raw.githubusercontent.com/artuq/LootClicker/main/assets/kenney_tiny-dungeon/License.txt" },
+  { "key": "kenney_td_tilesheet", "type": "text", "file": "kenney_tiny-dungeon-Tilesheet.txt", "url": "https://raw.githubusercontent.com/artuq/LootClicker/main/assets/kenney_tiny-dungeon/Tilesheet.txt" },
+
+  {
+    "key": "font_pixel",
+    "type": "font",
+    "family": "PressStart2P",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/pressstart2p/PressStart2P-Regular.ttf",
+    "license": "SIL OFL 1.1",
+    "credit": "Press Start 2P — CodeMan38 (google/fonts), OFL 1.1",
+    "source": "https://fonts.google.com/specimen/Press+Start+2P"
+  },
+  { "key": "ofl_pressstart2p", "type": "text", "file": "PressStart2P-OFL.txt", "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/pressstart2p/OFL.txt" },
+  { "key": "kenney_pack1_license", "type": "text", "file": "kenney_asset-pack-1-LICENSE.md", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/LICENSE.md" },
+
+  { "key": "sfx_laser", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/Digital%20sounds%20(60%20sounds)/laser1.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, Digital sounds", "source": "https://kenney.nl/assets/audio" },
+  { "key": "sfx_laser2", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/Digital%20sounds%20(60%20sounds)/laser2.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, Digital sounds", "source": "https://kenney.nl/assets/audio" },
+  { "key": "sfx_zap", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/Digital%20sounds%20(60%20sounds)/zap1.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, Digital sounds", "source": "https://kenney.nl/assets/audio" },
+  { "key": "sfx_tone", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/Digital%20sounds%20(60%20sounds)/tone1.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, Digital sounds", "source": "https://kenney.nl/assets/audio" },
+  { "key": "sfx_powerup", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/Digital%20sounds%20(60%20sounds)/powerUp1.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, Digital sounds", "source": "https://kenney.nl/assets/audio" },
+  { "key": "sfx_coins", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/RPG%20sounds%20(50%20sounds)/handleCoins.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, RPG sounds", "source": "https://kenney.nl/assets/audio" },
+  { "key": "sfx_door", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/RPG%20sounds%20(50%20sounds)/doorOpen_1.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, RPG sounds", "source": "https://kenney.nl/assets/audio" },
+  { "key": "sfx_slice", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/RPG%20sounds%20(50%20sounds)/knifeSlice.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, RPG sounds", "source": "https://kenney.nl/assets/audio" },
+  { "key": "sfx_hit", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/Jingle%20sounds%20(85%20sounds)/jingles_HIT/jingles_HIT00.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, Jingle sounds", "source": "https://kenney.nl/assets/audio" },
+  { "key": "sfx_levelup", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/Jingle%20sounds%20(85%20sounds)/jingles_NES/jingles_NES00.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, NES jingles", "source": "https://kenney.nl/assets/audio" },
+  { "key": "sfx_evolve", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/Jingle%20sounds%20(85%20sounds)/jingles_HIT/jingles_HIT05.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, Jingle sounds", "source": "https://kenney.nl/assets/audio" },
+  { "key": "sfx_click", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/UI%20sounds%20(50%20sounds)/click1.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, UI sounds", "source": "https://kenney.nl/assets/audio" },
+  { "key": "sfx_rollover", "type": "audio", "url": "https://raw.githubusercontent.com/iwenzhou/kenney/master/Audio%20(295%20files)/UI%20sounds%20(50%20sounds)/rollover1.ogg", "license": "CC0 1.0", "credit": "Kenney — Asset Pack 1, UI sounds", "source": "https://kenney.nl/assets/audio" },
+
+  {
+    "key": "music_night",
+    "type": "audio",
+    "url": "https://opengameart.org/sites/default/files/dark_cavern_ambient_001.ogg",
+    "license": "CC0 1.0",
+    "credit": "Paul Wortmann — Dark Cavern Ambient 001",
+    "source": "https://opengameart.org/content/dark-cavern-ambient-001",
+    "delayMs": 2500
+  },
+  {
+    "key": "music_boss",
+    "type": "audio",
+    "url": "https://opengameart.org/sites/default/files/Intense.ogg",
+    "license": "CC-BY 3.0",
+    "credit": "Intense by HorrorPen (opengameart.org), CC-BY 3.0",
+    "source": "https://opengameart.org/content/intense",
+    "delayMs": 2500
+  }
+]
