@@ -3,6 +3,11 @@ import { ASSET_MANIFEST } from '../data/assets.js';
 import { buildFallbackTextures } from '../systems/TextureFactory.js';
 import { TD, GROUND } from '../data/sprites.js';
 
+const assets = ASSET_MANIFEST.map((entry) => ({
+  ...entry,
+  url: import.meta.env.BASE_URL + entry.url.replace(/^\//, ''),
+}));
+
 export default class BootScene extends Phaser.Scene {
   constructor() { super('Boot'); }
 
@@ -13,7 +18,7 @@ export default class BootScene extends Phaser.Scene {
       console.warn('[Boot] asset unavailable, falling back to procedural art:', file.key);
     });
 
-    for (const entry of ASSET_MANIFEST) {
+    for (const entry of assets) {
       if (entry.type === 'spritesheet') {
         this.load.spritesheet(entry.key, entry.url, {
           frameWidth: entry.frameWidth,
@@ -39,7 +44,7 @@ export default class BootScene extends Phaser.Scene {
   }
 
   loadPixelFont() {
-    const fonts = ASSET_MANIFEST.filter((e) => e.type === 'font');
+    const fonts = assets.filter((e) => e.type === 'font');
     if (!fonts.length || !window.FontFace) return Promise.resolve();
     return Promise.all(fonts.map(async (f) => {
       const family = f.family || 'PixelFont';

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test:deployment": "npm run build && node scripts/deployment-test.mjs",
     "preview": "vite preview"
   },
   "devDependencies": {

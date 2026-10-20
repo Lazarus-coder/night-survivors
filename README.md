@@ -4,11 +4,23 @@
 
 ## 运行
 
+建议使用 Node.js 22（与 GitHub Actions 一致）。
+
 ```bash
-npm install
+npm ci
 npm run dev      # http://localhost:5173
 npm run build    # 产物在 dist/，可静态托管
+npm run preview  # 本地预览已构建的 dist/
 ```
+
+### 静态部署
+
+默认 `base: './'`，同一份 `dist/` 可放在站点根目录或 `/night-survivors/` 等子目录。
+部署时保留 `dist/` 内的目录结构，通过 HTTP 静态服务访问，并使用带末尾斜杠的目录 URL（例如 `/night-survivors/`）。
+BootScene 统一按 Vite 的 `base` 解析生成清单中的图集、音频和字体路径；重新生成清单无需手动调整部署路径。
+
+仓库的 `.github/workflows/pages.yml` 会在推送到 `main` 时构建并发布 GitHub Pages，也支持手动触发。
+该工作流尚未运行浏览器测试；发布前可在本机运行 `npm run test:deployment`，验证同一构建产物在根目录和项目子目录下都能加载素材并启动游戏。
 
 ## 操作
 
@@ -74,36 +86,50 @@ src/
     EnemySpawner.js     环形刷怪、权重时间窗、回收复用、精英/死神事件
     WeaponSystem.js     6 种武器行为、投射物池、燃烧池、光环
     UpgradeSystem.js    升级卡池生成（含进化优先级、兜底卡）
-    TextureFactory.js   程序化像素贴图：无外部素材也能完整运行
+    TextureFactory.js   程序化像素贴图（缺图集时的回退仍有限制，见下文）
     SaveSystem.js       localStorage 局外进度与解锁
-    AudioSystem.js      WebAudio 合成音效（无需音频文件）
+    AudioSystem.js      优先播放素材音效，缺失时用 WebAudio 合成
   scenes/               Boot / Menu / Game / Hud / Upgrade / GameOver
 ```
 
 ## 素材与授权
 
 美术/音频全部来自开源素材，清单见 `LICENSES.md`、许可证原件在 `licenses/`。
-本项目实际使用（约 2 MB，全部可商用）：
+当前清单共 18 项，约 5.5 MB：2 张图集、1 个字体和 15 个音频文件。许可与署名信息如下：
 
 | 用途 | 素材 | 许可 |
 | --- | --- | --- |
 | 角色 / 怪物 / 武器 / 地形 / 药水 / 宝箱（16×16） | Kenney *Tiny Dungeon* | CC0 1.0 |
 | 金币图标 | Kenney *Roguelike/RPG pack* | CC0 1.0 |
-| 12 个战斗/UI 音效 | Kenney *Asset Pack 1*（Digital / RPG / UI / Jingle） | CC0 1.0 |
+| 已收录的 13 个战斗/UI 音效 | Kenney *Asset Pack 1*（Digital / RPG / UI / Jingle） | CC0 1.0 |
 | 环境音乐 | Paul Wortmann *Dark Cavern Ambient 001* | CC0 1.0 |
+| Boss 音乐 | HorrorPen *Intense* | CC-BY 3.0 |
 | 像素字体 | Press Start 2P（`licenses/PressStart2P-OFL.txt`） | SIL OFL 1.1 |
 
 工作流：`asset-spec.json` 描述每个文件（key / URL / 类型 / 许可 / 出处），
 `node scripts/fetch-assets.mjs` 下载到 `public/assets/` 并生成 `src/data/assets.js` 清单与 `LICENSES.md`；
-已存在的文件会跳过（`--force` 重下）。脚本会校验 PNG/Ogg/TTF 文件头，防止把 HTML 错误页当成素材。
+已存在且大于 64 字节的素材文件会跳过（`--force` 重下），许可证文本仍会重新请求。
+下载的素材会校验文件头，防止把 HTML 错误页当成素材；使用仓库内已提交的素材进行构建和部署测试无需重新下载。
 
 贴图索引集中在 `src/data/sprites.js`（例如 96=骑士、108=史莱姆、120=蝙蝠、121=幽灵、122=蜘蛛）。
 挑索引用 `node scripts/tile-inspect.mjs --src /assets/sprites/kenney_td_tiles.png --tile 16 --zoom 7 --pick 96,97,108`
 生成带编号的放大对照图 —— 每次都是看图确认，不靠猜。
 
-下载失败或清单为空时，游戏自动回退到 `TextureFactory.js` 的程序化像素贴图，功能不受影响。
+素材缺失时，战斗/UI 音效可回退到合成声音，字体使用系统备用字体。
+已知限制：程序化贴图尚未覆盖角色、敌人、武器和图标对原图集的引用；图集缺失时仍可能显示缺失贴图。
+完整画面依赖 `public/assets/` 中的图集随构建产物一起部署。
 
 ## 自动化验证
+
+浏览器测试使用 Playwright 的 `chrome` channel，需要本机安装 Google Chrome。
+`test:deployment` 会自动构建、启动临时本地静态服务器并在测试后关闭，无需先运行开发服务器。
+它检查当前 18 项素材的 HTTP 响应、图集和音频缓存、字体加载，以及菜单进入游戏、角色移动和背景音乐；失败时返回非零退出码。
+
+```bash
+npm run test:deployment           # 构建后分别挂载根目录/子目录，验证全部素材、字体、移动和背景音乐
+```
+
+以下试玩和截图脚本需要先在另一个终端运行 `npm run dev`，确保游戏位于 `http://localhost:5173/`：
 
 ```bash
 node scripts/systems-test.mjs 30   # 一键发全套武器+被动，强制弹升级面板，跑 30s 看是否有异常
@@ -113,7 +139,7 @@ node scripts/tile-inspect.mjs --src /assets/sprites/kenney_td_tiles.png --tile 1
                                    # 生成带编号的放大瓦片对照图，用来核对美术索引
 ```
 
-输出 `test-results/smoke.json`（逐秒状态轨迹：hp / 等级 / 击杀 / 敌人数 / 弹体数 / 音频采样）、
+部署测试直接在终端输出断言结果；试玩脚本输出 `test-results/smoke.json`（逐秒状态轨迹：hp / 等级 / 击杀 / 敌人数 / 弹体数 / 音频采样）、
 `test-results/systems.json`、`test-results/endgame.json` 与 `test-results/shots/*.png` 截图。
 这套脚本已经抓出过：`Distance.BetweenSquared` 不存在导致的每帧异常、HUD 不刷新、飞刀按朝向投掷导致 45 秒 0 杀、
 刷怪曲线中段过陡、以及「顺手按键 + JustDown 轮询」丢输入 —— 都是靠 trace 与截图定位的。
