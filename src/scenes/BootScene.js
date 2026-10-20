@@ -38,8 +38,9 @@ export default class BootScene extends Phaser.Scene {
 
   async create() {
     await this.loadPixelFont();
-    buildFallbackTextures(this, 4);
+    // Terrain sampling needs the original sheet layout, before sparse fallback frames exist.
     this.composeGroundTiles();
+    buildFallbackTextures(this, 4);
     this.scene.start('Menu');
   }
 

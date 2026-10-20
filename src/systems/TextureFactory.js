@@ -1,5 +1,6 @@
-// Procedural pixel-art fallback. Keeps the game fully playable when no external
-// asset pack is present; BootScene overrides these keys if real art loads.
+import { SPRITES, TD, RL } from '../data/sprites.js';
+
+// Procedural art supplies missing sheets without replacing vendored textures.
 
 const PAL = {
   k: 0x14121f, d: 0x2a2440, b: 0x4a3a76, p: 0x7a5ea8, r: 0xd4436a, o: 0xe8894a,
@@ -146,6 +147,44 @@ const ART = {
   potion: ['..kk...', '.kwswk.', '.krrrsk', '.krrrsk', '..kk...'],
 };
 
+const FALLBACK_ART = {
+  mage: 'hero', villager: 'e_zombie', bandit: 'hero', zombie: 'e_zombie',
+  cultist: 'e_ghost', pale: 'e_skeleton', blade: 'hero', blob: 'e_slime',
+  crab: 'e_wolf', boar: 'e_wolf', bat: 'e_bat', ghost: 'e_ghost',
+  spider: 'e_bat', beetle: 'e_slime', beast: 'e_ogre', knightElite: 'hero',
+  mageElite: 'hero', death: 'e_death', knife: 'w_knife', axe: 'w_axe',
+  hammer: 'w_wand', hammerGold: 'w_wand', cauldron: 'w_garlic', vial: 'w_flask',
+  vialBlue: 'w_flask', slash: 'w_bolt', sword: 'w_knife', twinAxe: 'w_axe',
+  torchCyan: 'w_bolt', might: 'hero', armor: 'hero', swift: 'e_bat',
+  cooldown: 'w_bolt', area: 'w_garlic', amount: 'gem', magnet: 'gem',
+  duration: 'w_flask', growth: 'w_flask', gemBig: 'gem', chestOpen: 'chest',
+};
+
+function makeFallbackSheet(scene, key) {
+  if (scene.textures.exists(key)) return;
+  const frames = new Map();
+  for (const [name, sprite] of Object.entries(SPRITES)) {
+    if (sprite.tex === key && !frames.has(sprite.frame)) {
+      frames.set(sprite.frame, FALLBACK_ART[name] || name);
+    }
+  }
+  const sheet = scene.textures.createCanvas(key, frames.size * 16, 16);
+  const ctx = sheet.context;
+  ctx.imageSmoothingEnabled = false;
+  let x = 0;
+  for (const [frame, art] of frames) {
+    const rows = ART[art];
+    const width = Math.max(...rows.map((row) => row.length));
+    const height = rows.length;
+    const source = scene.textures.get(art).getSourceImage();
+    ctx.drawImage(source, x + Math.floor((16 - width) / 2), Math.floor((16 - height) / 2), width, height);
+    // Existing entity tables already copied these sheet keys and numeric frames.
+    sheet.add(frame, 0, x, 0, 16, 16);
+    x += 16;
+  }
+  sheet.refresh();
+}
+
 function drawPixelMap(scene, key, rows, scale, anchorY = 1) {
   if (scene.textures.exists(key)) return;
   const g = scene.make.graphics({ add: false, textureManager: scene.textures });
@@ -272,6 +311,8 @@ export function buildFallbackTextures(scene, scale = 4) {
     const s = key === 'e_death' ? scale + 2 : scale - (key.startsWith('gem') || key.startsWith('coin') ? 1 : 0);
     drawPixelMap(scene, key, rows, Math.max(2, s));
   }
+  makeFallbackSheet(scene, TD);
+  makeFallbackSheet(scene, RL);
   makeGroundTile(scene);
   makePropTile(scene);
   makeCircle(scene, 'fx_dot', 16, 0xffffff);

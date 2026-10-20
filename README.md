@@ -20,7 +20,8 @@ npm run preview  # 本地预览已构建的 dist/
 BootScene 统一按 Vite 的 `base` 解析生成清单中的图集、音频和字体路径；重新生成清单无需手动调整部署路径。
 
 仓库的 `.github/workflows/pages.yml` 会在推送到 `main` 时构建并发布 GitHub Pages，也支持手动触发。
-该工作流尚未运行浏览器测试；发布前可在本机运行 `npm run test:deployment`，验证同一构建产物在根目录和项目子目录下都能加载素材并启动游戏。
+发布前会安装测试浏览器并运行 `npm run test:deployment`；素材加载、游戏启动和缺素材回退测试通过后，才上传同一份 `dist/` 产物。
+修复需进入 `main` 才会自动更新线上站点，仅推送到功能分支不会更新 Pages。
 
 ## 操作
 
@@ -86,7 +87,7 @@ src/
     EnemySpawner.js     环形刷怪、权重时间窗、回收复用、精英/死神事件
     WeaponSystem.js     6 种武器行为、投射物池、燃烧池、光环
     UpgradeSystem.js    升级卡池生成（含进化优先级、兜底卡）
-    TextureFactory.js   程序化像素贴图（缺图集时的回退仍有限制，见下文）
+    TextureFactory.js   程序化像素贴图与兼容原图集帧编号的备用图集
     SaveSystem.js       localStorage 局外进度与解锁
     AudioSystem.js      优先播放素材音效，缺失时用 WebAudio 合成
   scenes/               Boot / Menu / Game / Hud / Upgrade / GameOver
@@ -116,17 +117,24 @@ src/
 生成带编号的放大对照图 —— 每次都是看图确认，不靠猜。
 
 素材缺失时，战斗/UI 音效可回退到合成声音，字体使用系统备用字体。
-已知限制：程序化贴图尚未覆盖角色、敌人、武器和图标对原图集的引用；图集缺失时仍可能显示缺失贴图。
-完整画面依赖 `public/assets/` 中的图集随构建产物一起部署。
+角色、敌人、武器和图标会使用兼容原图集帧编号的程序化备用图集，地面和特效也有备用贴图。
+备用画面较简单，缺失的背景音乐不会播放；完整美术和音乐仍依赖 `public/assets/` 随构建产物一起部署。
 
 ## 自动化验证
 
 浏览器测试使用 Playwright 的 `chrome` channel，需要本机安装 Google Chrome。
 `test:deployment` 会自动构建、启动临时本地静态服务器并在测试后关闭，无需先运行开发服务器。
-它检查当前 18 项素材的 HTTP 响应、图集和音频缓存、字体加载，以及菜单进入游戏、角色移动和背景音乐；失败时返回非零退出码。
+它覆盖根目录和项目子目录的目录入口与 `index.html`，检查当前 18 项素材的 HTTP 响应、图集和音频缓存、字体加载，以及菜单进入游戏、角色移动和背景音乐。
+另通过请求拦截模拟单张图集、全部图集及全部素材缺失，检查备用画面和游戏运行；失败时返回非零退出码。
 
 ```bash
-npm run test:deployment           # 构建后分别挂载根目录/子目录，验证全部素材、字体、移动和背景音乐
+npm run test:deployment           # 构建后验证正常加载和缺素材回退
+```
+
+发布完成后，可用同一套正常加载检查验证线上目录入口和 `index.html`：
+
+```bash
+node scripts/deployment-test.mjs https://lazarus-coder.github.io/night-survivors/
 ```
 
 以下试玩和截图脚本需要先在另一个终端运行 `npm run dev`，确保游戏位于 `http://localhost:5173/`：
